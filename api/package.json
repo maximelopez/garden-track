@@ -1,0 +1,27 @@
+{
+  "name": "garden-track-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file=.env src/index.ts",
+    "start": "node --env-file-if-exists=.env src/index.ts",
+    "seed": "node --env-file=.env src/scripts/seed.ts",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mongoose": "^9.12.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.0.0",
+    "typescript": "~6.0.3"
+  }
+}
