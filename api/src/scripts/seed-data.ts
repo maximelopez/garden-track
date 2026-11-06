@@ -1,9 +1,18 @@
 /**
  * Données de départ : les espèces du jardin
  * + quelques photos de démonstration (images picsum.photos, pas des vrais animaux).
+ * Les slugs doivent correspondre à SPECIES_SLUGS (src/constants/species.ts).
  */
+import type { SpeciesSlug } from '../constants/species.ts';
 
-export const speciesSeed = [
+export const speciesSeed: {
+  number: number;
+  slug: SpeciesSlug;
+  name: string;
+  scientificName: string;
+  description: string;
+  emoji: string;
+}[] = [
   {
     number: 1,
     slug: 'chat',
@@ -166,8 +175,10 @@ export const speciesSeed = [
   },
 ];
 
-/** Photos de démonstration à générer : [espèce, nombre de photos, date de la plus récente] */
-export const demoPhotos: [slug: string, count: number, lastTakenAt: string][] = [
+/**
+ * Photos de démonstration à générer : [espèce (null = non identifiée), nombre, date de la plus récente]
+ */
+export const demoPhotos: [slug: SpeciesSlug | null, count: number, lastTakenAt: string][] = [
   ['chat', 24, '2026-11-05T22:14:00.000Z'],
   ['ecureuil', 12, '2026-11-06T08:02:00.000Z'],
   ['herisson', 2, '2026-10-28T23:09:00.000Z'],
@@ -177,4 +188,5 @@ export const demoPhotos: [slug: string, count: number, lastTakenAt: string][] = 
   ['pigeon-ramier', 31, '2026-11-05T16:20:00.000Z'],
   ['lezard', 3, '2026-10-21T13:12:00.000Z'],
   ['merle', 9, '2026-11-06T06:58:00.000Z'],
+  [null, 3, '2026-11-06T02:40:00.000Z'],
 ];

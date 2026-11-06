@@ -1,13 +1,14 @@
 # GardenTrack 🦊
 
-Application qui recense les animaux qui passent dans le jardin. Un capteur photo prend les animaux en photo (renard, hérisson, écureuil, mésange, merle…), les photos sont classées par espèce et consultables depuis une application mobile.
+Application qui recense les animaux qui passent dans le jardin. Un piège photo prend les animaux en photo (renard, hérisson, écureuil, chouette, merle…), les photos sont classées par espèce et consultables depuis une application mobile.
 
 Projet réalisé dans le cadre du cours **Applications mobiles et connectées (IoT)**.
 
 ## Fonctionnement
 
-1. Le **capteur** prend une photo et l'envoie à l'API (`POST /photos`).
-2. L'**API** stocke l'image sur Cloudinary et enregistre ses informations (espèce, date, URL) dans MongoDB.
+1. Le **piège photo** (script Python) détecte l'animal avec une IA, envoie la photo sur **Cloudinary**,
+   puis publie un message JSON sur le broker **MQTT** (EMQX, topic `trackgarden/captures`).
+2. L'**API** est abonnée à ce topic : elle enregistre chaque capture dans **MongoDB**.
 3. L'**application mobile** affiche les espèces du jardin sous forme de grille, puis la galerie de photos de chaque espèce.
 
 ## Avancement
@@ -17,7 +18,8 @@ Projet réalisé dans le cadre du cours **Applications mobiles et connectées (I
 - [x] API REST Express + MongoDB Atlas, déployée sur Render
 - [x] Intégration continue (GitHub Actions) et déploiement automatique
 - [x] Branchement de l'application mobile sur l'API
-- [ ] Réception des photos du capteur (`POST /photos`, Cloudinary)
+- [x] Réception des photos du piège photo via MQTT
+- [ ] Identification des animaux inconnus depuis l'application
 - [ ] Finitions (états d'erreur, animations, build de l'application)
 
 ## Structure du dépôt
@@ -26,7 +28,7 @@ Projet réalisé dans le cadre du cours **Applications mobiles et connectées (I
 garden-track/
 ├── .github/workflows/  → intégration continue (GitHub Actions)
 ├── mobile/             → application mobile (Expo)
-└── api/                → API REST (Express, MongoDB)
+└── api/                → API REST (Express, MongoDB, MQTT)
 ```
 
 ## Application mobile
@@ -83,6 +85,7 @@ Scanner le QR code avec l'application **Expo Go** (SDK 58).
 ## API
 
 API REST en **Express 5 + MongoDB (Mongoose)**, en TypeScript exécuté directement par Node.js (≥ 22.18).
+Elle reçoit les photos du piège par **MQTT** (abonnement au topic `trackgarden/captures`).
 Détails des routes et de l'organisation : [`api/README.md`](api/README.md).
 
 ### Lancer l'API
@@ -90,7 +93,7 @@ Détails des routes et de l'organisation : [`api/README.md`](api/README.md).
 ```bash
 cd api
 npm install
-cp .env.example .env   # puis renseigner MONGODB_URI (MongoDB Atlas)
+cp .env.example .env   # puis renseigner MONGODB_URI et MQTT_PASSWORD
 npm run seed           # espèces + photos de démonstration
 npm run dev            # http://localhost:3000
 ```
@@ -103,6 +106,7 @@ npm run dev            # http://localhost:3000
   Seul le dossier `api/` est déployé, et uniquement quand la CI est passée au vert
   (*Auto-Deploy : After CI Checks Pass*).
 - **Base de données** : MongoDB Atlas.
+- **Messagerie** : broker MQTT EMQX Serverless (TLS).
 
 > Sur l'offre gratuite de Render, l'API se met en veille après 15 minutes sans requête :
 > la première requête suivante peut prendre environ une minute.

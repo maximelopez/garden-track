@@ -41,6 +41,22 @@ describe('API GardenTrack', () => {
     assert.match(body.error, /Route introuvable/);
   });
 
+  it('PATCH /photos/:id refuse une espèce hors de la liste', async () => {
+    const res = await fetch(`${baseUrl}/photos/507f1f77bcf86cd799439011`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ speciesSlug: 'dinosaure' }),
+    });
+    assert.equal(res.status, 400);
+    const body = (await res.json()) as { error: string };
+    assert.match(body.error, /chat, chien, ecureuil/);
+  });
+
+  it('GET /photos refuse une limite trop grande', async () => {
+    const res = await fetch(`${baseUrl}/photos?limit=1000`);
+    assert.equal(res.status, 400);
+  });
+
   it('GET /photos/:id avec un id invalide renvoie une 404', async () => {
     const res = await fetch(`${baseUrl}/photos/pas-un-id`);
     assert.equal(res.status, 404);

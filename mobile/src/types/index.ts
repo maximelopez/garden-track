@@ -19,7 +19,7 @@ export type Species = {
 /** Une photo prise par le capteur */
 export type Photo = {
   id: string;
-  speciesSlug: string; // à quelle espèce appartient la photo
+  speciesSlug: string | null; // espèce détectée par l'IA — null si non identifiée
   imageUrl: string; // image complète (Cloudinary)
   thumbnailUrl: string; // miniature pour les grilles (Cloudinary)
   takenAt: string; // date ISO de la prise de vue

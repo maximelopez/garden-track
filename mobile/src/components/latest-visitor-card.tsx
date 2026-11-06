@@ -51,7 +51,7 @@ export function LatestVisitorCard({ photo, species }: Props) {
           <Text style={styles.emoji}>🐾</Text>
         )}
         <View style={styles.texts}>
-          <Text style={[styles.name, { color: colors.text }]}>{species?.name ?? 'Inconnu'}</Text>
+          <Text style={[styles.name, { color: colors.text }]}>{species?.name ?? 'Animal non identifié'}</Text>
           <Text style={[styles.time, { color: colors.textMuted }]}>
             {formatRelative(photo.takenAt)}
           </Text>
