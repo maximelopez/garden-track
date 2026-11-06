@@ -47,7 +47,7 @@ export function SpeciesCard({ species, width }: Props) {
         ]}
       >
         <Text style={[styles.number, { color: colors.textMuted }]}>
-          #{species.id.padStart(3, '0')}
+          #{String(species.number).padStart(3, '0')}
         </Text>
         {/* nombre de photos (seulement si l'animal a déjà été observé) */}
         {discovered && (

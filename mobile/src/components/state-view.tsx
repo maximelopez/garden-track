@@ -1,14 +1,31 @@
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { FontSize, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-/** Écran de chargement (rond qui tourne au centre) */
+/**
+ * Écran de chargement (rond qui tourne au centre).
+ * Si le chargement dure, on explique que le serveur se réveille
+ * (l'API gratuite sur Render se met en veille après 15 min sans requête).
+ */
 export function LoadingView() {
   const colors = useTheme();
+  const [slow, setSlow] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSlow(true), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={[styles.center, { backgroundColor: colors.background }]}>
       <ActivityIndicator color={colors.accent} />
+      {slow && (
+        <Text style={[styles.message, { color: colors.textMuted }]}>
+          Réveil du serveur…{'\n'}Cela peut prendre jusqu'à une minute.
+        </Text>
+      )}
     </View>
   );
 }

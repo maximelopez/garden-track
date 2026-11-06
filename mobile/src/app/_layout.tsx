@@ -6,11 +6,12 @@ import {
   PlusJakartaSans_800ExtraBold,
   useFonts,
 } from '@expo-google-fonts/plus-jakarta-sans';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { focusManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { AppState, Platform } from 'react-native';
 
 import { Fonts } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -26,6 +27,16 @@ const queryClient = new QueryClient({
       retry: 1, // en cas d'erreur réseau, on réessaie une fois
     },
   },
+});
+
+// Quand l'app revient au premier plan, TanStack Query rafraîchit les données
+// (pratique pour voir les nouvelles photos du capteur).
+focusManager.setEventListener((handleFocus) => {
+  if (Platform.OS === 'web') return undefined;
+  const subscription = AppState.addEventListener('change', (state) => {
+    handleFocus(state === 'active');
+  });
+  return () => subscription.remove();
 });
 
 export default function RootLayout() {

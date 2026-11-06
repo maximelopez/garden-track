@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Link, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ActivityIndicator,
   FlatList,
@@ -25,6 +25,7 @@ export default function AnimalScreen() {
   const colors = useTheme();
   const scheme = useScheme();
   const { width } = useWindowDimensions();
+  const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
 
   const speciesQuery = useSpecies(slug);
@@ -38,6 +39,13 @@ export default function AnimalScreen() {
   }
 
   const species = speciesQuery.data;
+  // les pages chargées (30 photos chacune) mises bout à bout
+  const photos = photosQuery.data?.pages.flatMap((page) => page.data) ?? [];
+
+  const refresh = () => {
+    speciesQuery.refetch();
+    photosQuery.refetch();
+  };
 
   return (
     <>
@@ -45,18 +53,32 @@ export default function AnimalScreen() {
       <Stack.Screen options={{ title: species.name }} />
 
       <FlatList
-        data={photosQuery.data ?? []}
+        data={photos}
         keyExtractor={(item) => item.id}
         numColumns={COLUMNS}
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.list}
         columnWrapperStyle={styles.row}
         style={{ backgroundColor: colors.background }}
-        refreshing={photosQuery.isRefetching}
-        onRefresh={photosQuery.refetch}
+        refreshing={photosQuery.isRefetching && !photosQuery.isFetchingNextPage}
+        onRefresh={refresh}
+        // arrivé près du bas de la galerie → on charge la page suivante
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (photosQuery.hasNextPage && !photosQuery.isFetchingNextPage) {
+            photosQuery.fetchNextPage();
+          }
+        }}
+        ListFooterComponent={
+          photosQuery.isFetchingNextPage ? (
+            <ActivityIndicator color={colors.accent} style={styles.footer} />
+          ) : undefined
+        }
         renderItem={({ item }) => (
-          <Link href={{ pathname: '/photo/[id]', params: { id: item.id } }} asChild>
-            <Pressable style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+          <Pressable
+            onPress={() => router.push({ pathname: '/photo/[id]', params: { id: item.id } })}
+            style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+          >
               <Image
                 source={{ uri: item.thumbnailUrl }}
                 style={[
@@ -65,8 +87,7 @@ export default function AnimalScreen() {
                 ]}
                 transition={200}
               />
-            </Pressable>
-          </Link>
+          </Pressable>
         )}
         ListHeaderComponent={
           <View style={styles.header}>
@@ -107,6 +128,10 @@ export default function AnimalScreen() {
         ListEmptyComponent={
           photosQuery.isLoading ? (
             <ActivityIndicator color={colors.accent} style={styles.empty} />
+          ) : photosQuery.isError ? (
+            <Text style={[styles.empty, { color: colors.textMuted }]}>
+              Impossible de charger les photos. Tire vers le bas pour réessayer.
+            </Text>
           ) : (
             <Text style={[styles.empty, { color: colors.textMuted }]}>
               {species.photoCount === 0
@@ -189,6 +214,9 @@ const styles = StyleSheet.create({
   },
   thumb: {
     borderRadius: Radius.sm,
+  },
+  footer: {
+    marginVertical: Spacing.lg,
   },
   empty: {
     fontFamily: Fonts.medium,
