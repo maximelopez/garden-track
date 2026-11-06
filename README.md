@@ -15,7 +15,7 @@ Projet réalisé dans le cadre du cours **Applications mobiles et connectées (I
 ```
 garden-track/
 ├── mobile/   → application mobile (Expo)
-└── api/      → API REST (Express, MongoDB, Cloudinary) — à venir
+└── api/      → API REST (Express, MongoDB)
 ```
 
 ## Application mobile
@@ -68,7 +68,18 @@ Scanner le QR code avec l'application **Expo Go** (SDK 58).
 
 ## API
 
-_À venir._
+API REST en **Express 5 + MongoDB (Mongoose)**, en TypeScript exécuté directement par Node.js (≥ 22.18).
+Détails des routes et de l'organisation : [`api/README.md`](api/README.md).
+
+### Lancer l'API
+
+```bash
+cd api
+npm install
+cp .env.example .env   # puis renseigner MONGODB_URI (MongoDB Atlas)
+npm run seed           # espèces + photos de démonstration
+npm run dev            # http://localhost:3000
+```
 
 ## Crédits
 

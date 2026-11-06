@@ -22,6 +22,7 @@ npm run dev            # http://localhost:3000
 | `npm run dev` | Lance l'API en développement (redémarre à chaque modification) |
 | `npm run seed` | Vide et remplit la base avec les données de départ |
 | `npm run typecheck` | Vérifie les types TypeScript |
+| `npm test` | Lance les tests (`node:test`, sans base de données) |
 | `npm start` | Lance l'API (production) |
 
 ## Routes
@@ -45,6 +46,12 @@ src/
 ├── models/           → modèles Mongoose (Species, Photo)
 ├── routes/           → routes /species et /photos
 ├── middlewares/      → gestion des erreurs
+├── app.test.ts       → tests de l'API
 ├── scripts/          → seed (données de départ)
 └── utils/
 ```
+
+## Intégration continue
+
+À chaque push ou pull request qui modifie `api/`, GitHub Actions vérifie les types et lance les tests
+(workflow : `.github/workflows/api-ci.yml`).

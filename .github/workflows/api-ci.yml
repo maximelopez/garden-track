@@ -1,0 +1,42 @@
+# Intégration continue de l'API : vérifie les types et lance les tests
+# à chaque push / pull request qui modifie le dossier api/.
+name: API CI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'api/**'
+      - '.github/workflows/api-ci.yml'
+  pull_request:
+    paths:
+      - 'api/**'
+      - '.github/workflows/api-ci.yml'
+
+jobs:
+  check:
+    name: Typecheck & tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Vérifier les types
+        run: npm run typecheck
+
+      - name: Lancer les tests
+        run: npm test
