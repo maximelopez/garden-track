@@ -4,26 +4,32 @@
  * ⚠️ Le piège photo doit envoyer exactement ces slugs (voir CONTRAT.md).
  */
 export const SPECIES_SLUGS = [
+  // Mammifères
   'chat',
-  'chien',
   'ecureuil',
   'herisson',
   'renard',
+  'fouine',
   'lapin',
   'mulot',
   'blaireau',
   'chevreuil',
-  'chauve-souris',
+  // Oiseaux
+  'merle',
   'mesange',
   'rouge-gorge',
+  'moineau',
+  'pie',
+  'geai',
+  'pic-vert',
   'pigeon-ramier',
-  'hibou',
+  'tourterelle',
+  'chouette',
   'canard',
+  // Amphibiens et reptiles
   'grenouille',
   'lezard',
   'tortue',
-  'merle',
-  'pie',
 ] as const;
 
 export type SpeciesSlug = (typeof SPECIES_SLUGS)[number];

@@ -49,7 +49,7 @@ describe('API GardenTrack', () => {
     });
     assert.equal(res.status, 400);
     const body = (await res.json()) as { error: string };
-    assert.match(body.error, /chat, chien, ecureuil/);
+    assert.match(body.error, /chat, ecureuil, herisson/);
   });
 
   it('GET /photos refuse une limite trop grande', async () => {

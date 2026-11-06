@@ -35,7 +35,7 @@ garden-track/
 
 ### Fonctionnalités
 
-- **Accueil** : dernier visiteur photographié, statistiques (espèces observées, nombre de photos) et grille des 20 espèces, filtrable (*Tous / Observés / Jamais observés*). Les espèces jamais observées apparaissent grisées.
+- **Accueil** : dernier visiteur photographié, statistiques (espèces observées, nombre de photos) et grille des 23 espèces, filtrable (*Tous / Observés / Jamais observés*). Les espèces jamais observées apparaissent grisées.
 - **Fiche espèce** : illustration, nom scientifique, nombre de photos, dernière visite, description et galerie des photos prises par le capteur.
 - **Photo plein écran** : photo en grand avec sa date et le capteur qui l'a prise.
 - Galerie paginée (chargement automatique des photos suivantes en bas de liste).

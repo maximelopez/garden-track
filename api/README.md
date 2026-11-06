@@ -51,7 +51,7 @@ Il n'y a pas de route pour créer une photo : elles arrivent uniquement par MQTT
 - Un message invalide (JSON incorrect, champ manquant) est ignoré et logué, sans arrêter le serveur.
 - Les doublons (même `cloudinaryPublicId`) sont ignorés.
 
-Espèces suivies (20, liste dans `src/constants/species.ts`) : `chat`, `chien`, `ecureuil`, `herisson`, `renard`, `lapin`, `mulot`, `blaireau`, `chevreuil`, `chauve-souris`, `mesange`, `rouge-gorge`, `pigeon-ramier`, `hibou`, `canard`, `grenouille`, `lezard`, `tortue`, `merle`, `pie`.
+Espèces suivies (23, liste dans `src/constants/species.ts`) : `chat`, `ecureuil`, `herisson`, `renard`, `fouine`, `lapin`, `mulot`, `blaireau`, `chevreuil`, `merle`, `mesange`, `rouge-gorge`, `moineau`, `pie`, `geai`, `pic-vert`, `pigeon-ramier`, `tourterelle`, `chouette`, `canard`, `grenouille`, `lezard`, `tortue`.
 
 Pour tester sans le piège : publier un message d'exemple sur `trackgarden/captures` avec MQTTX.
 
